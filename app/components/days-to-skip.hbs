@@ -1,0 +1,13 @@
+<div class="days-to-skip-container">
+    <h4>Days to skip</h4>
+
+    <div class='days-list'>
+        {{#each @weekDays as |day|}}
+            <Input @type="checkbox" 
+                   @checked={{day.isChecked}} 
+                   @disabled={{day.isDisabled}} 
+                   {{on 'change' (fn skipDaysChange day)}}/> 
+            <label>{{day.day}}</label>
+        {{/each}}
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div class='job-name'>
+    <div>{{@name}}</div>
+    <div class='days-input'>
+        {{#if isEdit}}
+            <Input @value={{noOfDaysToShift}} />
+        {{/if}}
+    </div>
+    <div class='action-buttons'>
+        <button>
+            <img src={{concat 'assets/images/' (if isEdit 'cancel.svg' 'pencil.png')}} alt='Edit icon'
+                {{on 'click' (fn toggleEdit false)}} />
+
+            {{#if isEdit}}
+                <img src='assets/images/done.svg' alt='Edit icon' {{on 'click' (fn toggleEdit true)}} />
+            {{/if}}
+        </button>
+    </div>
+</div>

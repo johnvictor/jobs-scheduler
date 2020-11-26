@@ -1,0 +1,12 @@
+<div class="job-title">
+    <h4>{{format-date @jobDetails.startOn format=config.dateFormat}}</h4> 
+    <label>{{format-date @jobDetails.startOn format=config.dayFormat}}</label>
+</div>
+
+
+{{#each @jobDetails.jobs as |name|}}
+    <JobsList::JobsItem::JobAction 
+        @name={{name}} 
+        @jobDetails={{@jobDetails}}
+        @shiftDays={{@shiftDays}}/>
+{{/each}}

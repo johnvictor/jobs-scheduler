@@ -1,0 +1,14 @@
+<div class="job-list-container">
+    <h4>Jobs list</h4>
+
+    <div class="list">
+        {{#each @jobsList as |job|}}
+            {{#if job.jobs.length}}
+                <div class="list-item" >
+                    {{yield job}}
+                </div>
+            {{/if}}
+        {{/each}}
+    </div>
+
+</div>

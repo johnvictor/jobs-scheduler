@@ -1,0 +1,13 @@
+<div class="jobs-schedule-container">
+    <h2 class='page-title'>Jobs Scheduler</h2>
+    
+    <DaysToSkip @weekDays={{weekDays}} @onDayChange={{onDayChange}}/>
+
+    {{#if errorMsg}}
+        <div class="error">{{errorMsg}}</div>
+    {{/if}}
+
+    <JobsList @jobsList={{@model}} as |jobDetails|>
+        <JobsList::JobsItem @jobDetails={{jobDetails}} @shiftDays={{this.shiftDays}}/>
+    </JobsList>
+</div>

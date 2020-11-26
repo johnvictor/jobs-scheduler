@@ -1,0 +1,92 @@
+.jobs-schedule-container {
+    .page-title {
+        margin: 0 0 20px 0;
+        text-transform: uppercase;
+        font-family: 'Montserrat', sans-serif;
+
+    }
+
+    .error {
+        color: rgb(255, 65, 65);
+        margin: 0 0 20px 0;
+    }
+
+    display: flex;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f1f3f4;
+    height: 100%;
+    flex-direction: column;
+
+    .days-to-skip-container {
+        margin: 0 0 20px 0;
+
+        .days-list {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+            color: #5d5d5d;
+
+            input {
+                margin: 0 5px 0 0;
+            }
+
+            label {
+                margin: 0 10px 0 0;
+            }
+        }
+    }
+
+    .job-title {
+        display: flex;
+        margin: 0 0 10px 0;
+
+        label {
+            margin-left: auto;
+        }
+    }
+
+    .job-list-container {
+        display: flex;
+        flex-direction: column;
+
+        .list {
+            display: flex;
+            flex-wrap: wrap;
+
+        }
+
+        .list-item {
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            background: #fdfdfd;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+
+            .job-name {
+                display: flex;
+                padding: 5px;
+                align-items: center;
+                color: #5d5d5d;
+                cursor: pointer;
+
+                .days-input {
+                    flex: 1;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                input {
+                    width: 50px;
+                }
+    
+                .action-buttons {
+                    button img {
+                        cursor: pointer;
+                        width: 18px;
+                    }
+                }
+            }
+        }
+    }
+}

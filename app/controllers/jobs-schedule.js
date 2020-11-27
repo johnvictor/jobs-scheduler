@@ -6,8 +6,10 @@ import moment from 'moment';
 import jobsScheduleConfig from '../utils/jobs-schedule-config';
 
 const MAX_WEEK_DAYS = 7;
+
 export default class JobsScheduleController extends Controller {
-    weekDays = jobsScheduleConfig().weekDays;
+    config = jobsScheduleConfig();
+    weekDays = this.config.weekDays;
     jobDetails;
     noOfDaysToShift;
     jobName;
@@ -21,11 +23,9 @@ export default class JobsScheduleController extends Controller {
         this.jobName = args.name;
         this.jobDetails = args.jobDetails;
         this.noOfDaysToShift = noOfDaysToShift;
-
         if(!this.isFormValid) {
             return;
         }
-
         this.removeJobFromCurrentDate();
         const newDateToShiftJobs = moment(this.jobDetails.startOn).add(this.noOfDaysToShift, 'days');
         this.validateDateAndArrangeSchedule(newDateToShiftJobs);
@@ -71,26 +71,26 @@ export default class JobsScheduleController extends Controller {
     }
 
     addJobToDate(newDateToShiftJobs) {
-        const jobsIndex = this.getJobsIndexOnDate(newDateToShiftJobs);
+        const jobsIndex = this.config.getJobsIndexOnDate(this.model, newDateToShiftJobs);
 
         if(jobsIndex !== -1) {
             if(this.dateShiftRequired) {
                 this.shiftTheSchedule(jobsIndex, newDateToShiftJobs);
             } else {
                 this.model[jobsIndex].jobs.pushObject(this.jobName);
-                this.sortJobsSchedule();
+                this.config.sortJobsSchedule(this.model);
             }
         } else {
-            this.createJobsOnNewDate(this.model, newDateToShiftJobs, this.jobName);
-            this.sortJobsSchedule();
+            this.config.createJobsOnNewDate(this.model, newDateToShiftJobs, this.jobName);
+            this.config.sortJobsSchedule(this.model);
         }
     }
 
     //if dates overlaps, shift the schedule by one or valid date
     shiftTheSchedule(index, newDateToShiftJobs) {
-        const previousJobsScheldules = this.filterEmptyJobs(this.model.slice(0, index));
-        let futurejobSchedules = this.filterEmptyJobs(this.model.slice(index));
-        this.createJobsOnNewDate(previousJobsScheldules, moment(newDateToShiftJobs), this.jobName);
+        const previousJobsScheldules = this.config.filterEmptyJobs(this.model.slice(0, index));
+        let futurejobSchedules = this.config.filterEmptyJobs(this.model.slice(index));
+        this.config.createJobsOnNewDate(previousJobsScheldules, moment(newDateToShiftJobs), this.jobName);
         this.model.clear();
 
         futurejobSchedules.forEach((jobs, index) => {
@@ -117,39 +117,7 @@ export default class JobsScheduleController extends Controller {
             set(jobs, "startOn", startOn.toDate());
         });
         this.model.pushObjects([...previousJobsScheldules, ...futurejobSchedules]);
-        this.sortJobsSchedule();
+        this.config.sortJobsSchedule(this.model);
     }
 
-    //iterates and sets new valid date
-    findAndSetValidDate(startOn) {
-        startOn.add(1, 'days');
-        while(this.daysToSkip.indexOf(startOn.day()) !== -1) {
-            startOn.add(1, 'days');
-        }
-    }
-
-    filterEmptyJobs(jobsSchedule) {
-        return jobsSchedule.filter(jobs => jobs.jobs.length);
-    }
-
-    sortJobsSchedule() {
-        this.model.sort(function(a, b) {
-            const aStartOn = moment(a.startOn),
-                  bStartOn = moment(b.startOn);
-            if(aStartOn !== bStartOn) {
-                return aStartOn - bStartOn;
-            }
-        });
-    }
-
-    getJobsIndexOnDate(date) {
-        return this.model.findIndex(job => moment(job.startOn).isSame(date));
-    }
-
-    createJobsOnNewDate(model, date, job) {
-        model.pushObject({
-            startOn: date,
-            jobs: [job]
-        });
-    }
 }

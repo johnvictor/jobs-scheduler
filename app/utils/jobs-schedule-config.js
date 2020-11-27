@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export default function jobsScheduleConfig() {
   const weekDays = [
     { id: 0, day: 'Sunday', isChecked: true, isDisabled: true },
@@ -8,6 +10,10 @@ export default function jobsScheduleConfig() {
     { id: 5, day: 'Friday', isChecked: false },
     { id: 6, day: 'Saturday', isChecked: true, isDisabled: true },
   ];
+
+  
+  const dateFormat = 'DD MMM YYYY';
+  const dayFormat = 'ddd';
 
   const jobsList = [{
       startOn: '2020-09-01',
@@ -31,8 +37,30 @@ export default function jobsScheduleConfig() {
     }
   ];
 
-  const dateFormat = 'DD MMM YYYY';
-  const dayFormat = 'ddd';
+  const sortJobsSchedule = (model) => {
+    model.sort(function(a, b) {
+        const aStartOn = moment(a.startOn),
+              bStartOn = moment(b.startOn);
+        if(aStartOn !== bStartOn) {
+            return aStartOn - bStartOn;
+        }
+    });
+  }
 
-  return { weekDays, jobsList, dateFormat, dayFormat };
+  const createJobsOnNewDate = (model, date, job) => {
+    model.pushObject({
+        startOn: date,
+        jobs: [job]
+    });
+  }
+
+  const filterEmptyJobs = (jobsSchedule) => {
+    return jobsSchedule.filter(jobs => jobs.jobs.length);
+  }
+
+  const getJobsIndexOnDate = (model, date) => {
+    return model.findIndex(job => moment(job.startOn).isSame(date));
+  }
+
+  return { weekDays, jobsList, dateFormat, dayFormat, sortJobsSchedule, createJobsOnNewDate, filterEmptyJobs, getJobsIndexOnDate };
 }

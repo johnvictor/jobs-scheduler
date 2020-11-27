@@ -37,7 +37,7 @@ export default class JobsScheduleController extends Controller {
     }
 
     get isFormValid() {
-        this.errorMsg = '';
+        this.set('errorMsg', '');
         if (this.daysToSkip.length === MAX_WEEK_DAYS) {
             this.set('errorMsg', 'No days available!');
             return false;

@@ -1,13 +1,27 @@
 <div class="days-to-skip-container">
     <h4>Days to skip</h4>
 
-    <div class='days-list'>
+    <div class="mobile">
+        <Accordian @title='Select Days' @weekDays={{@weekDays}} as |day| >
+            <div>
+                <Input @type="checkbox" 
+                    @checked={{day.isChecked}} 
+                    @disabled={{day.isDisabled}} 
+                    {{on 'change' (fn skipDaysChange day)}}/> 
+                <label>{{day.day}}</label>
+            </div>
+        </Accordian>
+    </div>
+
+    <div class='days-list desktop'>
         {{#each @weekDays as |day|}}
-            <Input @type="checkbox" 
+            <div>
+                <Input @type="checkbox" 
                    @checked={{day.isChecked}} 
                    @disabled={{day.isDisabled}} 
                    {{on 'change' (fn skipDaysChange day)}}/> 
-            <label>{{day.day}}</label>
+                <label>{{day.day}}</label>
+            </div>
         {{/each}}
     </div>
 </div>

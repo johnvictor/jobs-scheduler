@@ -1,0 +1,16 @@
+<div class="acc-container">
+    <button type="button" class="acc-collapsible" {{on 'click' onStateChange}}>
+        {{@title}}
+        <span>
+            <img src={{concat 'assets/images/' (if isOpen 'expand_less.svg' 'expand_more.svg')}} />
+        </span>
+    </button>
+
+    {{#if isOpen}}
+        <div class='acc-content'>
+            {{#each @weekDays as |day|}}
+                {{yield day}}
+            {{/each}}
+        </div>
+    {{/if}}
+</div>

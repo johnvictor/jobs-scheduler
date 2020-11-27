@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap');
 @import 'jobs-schedule.scss';
+@import 'accordian.scss';
 
 *{ 
     margin: 0; 
@@ -42,3 +43,27 @@ input[type="checkbox"]{
     }
 }
 
+.desktop {
+    display: flex !important;    
+}
+
+.mobile {
+    display: none !important;
+}
+
+@media only screen and (max-width: 700px) {
+    .desktop {
+        display: none !important;    
+    }
+    
+    .mobile {
+        display: flex !important;
+    }
+
+    input[type="checkbox"]{
+        width: 25px;
+        height: 25px;
+        margin: 0 10px 0 0;
+    }
+
+}

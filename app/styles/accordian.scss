@@ -1,0 +1,41 @@
+.acc-container {
+    width: 100%;
+
+    .acc-collapsible {
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        display: flex;
+        align-items: center;
+        outline: none;
+        background: #e0e0e0;
+    }
+    
+    .acc-content {
+        padding: 10px;
+        background: #eaeaea;
+
+        div {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+    }
+    
+    .acc-active {
+        display: block;
+    }
+    
+    .acc-collapse {
+        transform: rotate(180deg);
+    }
+    
+    button {
+        display: flex;
+        span {
+            margin-left: auto;
+            font-weight: bold;
+        }
+    }
+}

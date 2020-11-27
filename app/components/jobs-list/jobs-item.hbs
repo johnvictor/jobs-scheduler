@@ -1,12 +1,21 @@
+<div class='move-alljobs-form'>
+    <Input @value={{noOfDaysToShiftAllJobs}} />
+    <button {{on 'click' (fn moveAllJobs noOfDaysToShiftAllJobs)}}><img src='assets/images/next.svg' alt='go'></button>
+</div>
+{{#if errorMsg}}
+    <div class="error">{{errorMsg}}</div>
+{{/if}}
+
 <div class="job-title">
-    <h4>{{format-date @jobDetails.startOn format=config.dateFormat}}</h4> 
+    <h4>{{format-date @jobDetails.startOn format=config.dateFormat}}</h4>
     <label>{{format-date @jobDetails.startOn format=config.dayFormat}}</label>
 </div>
 
-
-{{#each @jobDetails.jobs as |name|}}
-    <JobsList::JobsItem::JobAction 
-        @name={{name}} 
-        @jobDetails={{@jobDetails}}
-        @shiftDays={{@shiftDays}}/>
-{{/each}}
+<div class='job-list'>
+    {{#each @jobDetails.jobs as |name|}}
+        <JobsList::JobsItem::JobAction 
+            @name={{name}} 
+            @jobDetails={{@jobDetails}} 
+            @shiftDays={{@shiftDays}} />
+    {{/each}}
+</div>

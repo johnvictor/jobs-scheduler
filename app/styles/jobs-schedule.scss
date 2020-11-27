@@ -8,6 +8,14 @@
     right: 0;
 }
 
+.move-alljobs-form {
+    display: flex;
+
+    button {
+        width: 26px;
+    }
+}
+
 .jobs-schedule-container {
     position: relative;
 
@@ -74,6 +82,11 @@
             display: flex;
             flex-wrap: wrap;
 
+        }
+
+        .job-list {
+            height: 164px;
+            overflow: auto;
         }
 
         .list-item {

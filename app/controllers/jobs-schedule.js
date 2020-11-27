@@ -1,11 +1,8 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { set } from '@ember/object';
 
 import moment from 'moment';
 import jobsScheduleConfig from '../utils/jobs-schedule-config';
-
-const MAX_WEEK_DAYS = 7;
 
 export default class JobsScheduleController extends Controller {
     config = jobsScheduleConfig();
@@ -38,7 +35,7 @@ export default class JobsScheduleController extends Controller {
 
     get isFormValid() {
         this.set('errorMsg', '');
-        if (this.daysToSkip.length === MAX_WEEK_DAYS) {
+        if (this.daysToSkip.length === this.config.MAX_WEEK_DAYS) {
             this.set('errorMsg', 'No days available!');
             return false;
         }
@@ -77,7 +74,7 @@ export default class JobsScheduleController extends Controller {
             if(this.dateShiftRequired) {
                 this.shiftTheSchedule(jobsIndex, newDateToShiftJobs);
             } else {
-                this.model[jobsIndex].jobs.pushObject(this.jobName);
+                this.model[jobsIndex].jobs.unshiftObject(this.jobName);
                 this.config.sortJobsSchedule(this.model);
             }
         } else {
@@ -89,33 +86,10 @@ export default class JobsScheduleController extends Controller {
     //if dates overlaps, shift the schedule by one or valid date
     shiftTheSchedule(index, newDateToShiftJobs) {
         const previousJobsScheldules = this.config.filterEmptyJobs(this.model.slice(0, index));
-        let futurejobSchedules = this.config.filterEmptyJobs(this.model.slice(index));
+        const futurejobSchedules = this.config.filterEmptyJobs(this.model.slice(index));
         this.config.createJobsOnNewDate(previousJobsScheldules, moment(newDateToShiftJobs), this.jobName);
         this.model.clear();
-
-        futurejobSchedules.forEach((jobs, index) => {
-            let startOn;
-            const previousJob = futurejobSchedules[index -1];
-
-            if(previousJob && moment(jobs.startOn).isAfter(moment(previousJob.startOn))) {
-                return;
-            }
-
-            if (previousJob && moment(jobs.startOn).isSameOrBefore(moment(previousJob.startOn))) {
-                startOn = moment(previousJob.startOn);
-                startOn.add(1, 'days');
-                while(this.daysToSkip.indexOf(startOn.day()) !== -1) {
-                    startOn.add(1, 'days');
-                }
-            } else {
-                startOn = moment(newDateToShiftJobs);
-                startOn.add(1, 'days');
-                while(this.daysToSkip.indexOf(startOn.day()) !== -1) {
-                    startOn.add(1, 'days');
-                }
-            }
-            set(jobs, "startOn", startOn.toDate());
-        });
+        this.config.moveAllFutureJobsToNextValidDate(futurejobSchedules, newDateToShiftJobs, this.daysToSkip);
         this.model.pushObjects([...previousJobsScheldules, ...futurejobSchedules]);
         this.config.sortJobsSchedule(this.model);
     }

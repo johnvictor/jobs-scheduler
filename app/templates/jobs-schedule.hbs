@@ -9,6 +9,10 @@
     {{/if}}
 
     <JobsList @jobsList={{@model}} as |jobDetails|>
-        <JobsList::JobsItem @jobDetails={{jobDetails}} @shiftDays={{this.shiftDays}}/>
+        <JobsList::JobsItem 
+            @weekDays={{weekDays}}
+            @jobDetails={{jobDetails}}
+            @model={{@model}}
+            @shiftDays={{this.shiftDays}}/>
     </JobsList>
 </div>

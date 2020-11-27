@@ -1,4 +1,16 @@
+.background-image {
+    background: url('images/time.jpg');
+    opacity: 0.08;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 .jobs-schedule-container {
+    position: relative;
+
     .page-title {
         margin: 0 0 20px 0;
         text-transform: uppercase;
@@ -14,7 +26,6 @@
     display: flex;
     margin: 0 auto;
     padding: 20px;
-    background: #f1f3f4;
     height: 100%;
     flex-direction: column;
 

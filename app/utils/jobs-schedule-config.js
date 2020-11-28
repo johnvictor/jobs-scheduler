@@ -67,11 +67,12 @@ export default function jobsScheduleConfig() {
   const moveAllFutureJobsToNextValidDate = (
     futurejobSchedules,
     newDateToShiftJobs,
-    daysToSkip
+    daysToSkip,
+    lastPastJobs
   ) => {
     futurejobSchedules.forEach((jobs, index) => {
       let startOn;
-      const previousJob = futurejobSchedules[index - 1];
+      const previousJob = futurejobSchedules[index - 1] || lastPastJobs;
 
       if (
         previousJob &&
@@ -91,7 +92,6 @@ export default function jobsScheduleConfig() {
         }
       } else {
         startOn = moment(newDateToShiftJobs);
-        startOn.add(1, "days");
         while (daysToSkip.indexOf(startOn.day()) !== -1) {
           startOn.add(1, "days");
         }

@@ -31,15 +31,15 @@ export default class JobsItemComponent extends Component {
     @action
     moveAllJobs(noOfDaysToShiftAllJobs) {
         if(this.isFormValid) {
-            //:TODO - moves the overall tasks by two days. - need fix
-            const newDateToShiftJobs = moment(this.args.jobDetails.startOn).add(noOfDaysToShiftAllJobs, 'days');
-            const jobsIndex = this.config.getJobsIndexOnDate(this.args.model, this.args.jobDetails.startOn);
-            const previousJobsScheldules = this.config.filterEmptyJobs(this.args.model.slice(0, jobsIndex));
-            const futurejobSchedules = this.config.filterEmptyJobs(this.args.model.slice(jobsIndex));
-            this.config.moveAllFutureJobsToNextValidDate(futurejobSchedules, newDateToShiftJobs, this.daysToSkip);
-
-            this.args.model.clear();
-            this.args.model.pushObjects([...previousJobsScheldules, ...futurejobSchedules]);
+            const model = this.args.model;
+            const jobsDetail = this.args.jobDetails;
+            const newDateToShiftJobs = moment(jobsDetail.startOn).add(noOfDaysToShiftAllJobs, 'days');
+            const jobsIndex = this.config.getJobsIndexOnDate(model, jobsDetail.startOn);
+            const previousJobsScheldules = this.config.filterEmptyJobs(model.slice(0, jobsIndex));
+            const futurejobSchedules = this.config.filterEmptyJobs(model.slice(jobsIndex));
+            this.config.moveAllFutureJobsToNextValidDate(futurejobSchedules, newDateToShiftJobs, this.daysToSkip, previousJobsScheldules[previousJobsScheldules.length - 1]);
+            model.clear();
+            model.pushObjects([...previousJobsScheldules, ...futurejobSchedules]);
             this.noOfDaysToShiftAllJobs = '';
         }
     }

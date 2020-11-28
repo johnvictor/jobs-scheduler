@@ -64,40 +64,30 @@ export default function jobsScheduleConfig() {
     return model.findIndex((job) => moment(job.startOn).isSame(date));
   };
 
-  const moveAllFutureJobsToNextValidDate = (
-    futurejobSchedules,
-    newDateToShiftJobs,
-    daysToSkip,
-    lastPastJobs
-  ) => {
+  const moveAllJobsToNextValidDate = (futurejobSchedules, daysToSkip) => {
     futurejobSchedules.forEach((jobs, index) => {
-      let startOn;
-      const previousJob = futurejobSchedules[index - 1] || lastPastJobs;
+      let startOn = moment(jobs.startOn);
+      const previousJob = futurejobSchedules[index - 1];
+      skipDays(daysToSkip, startOn);
 
-      if (
-        previousJob &&
-        moment(jobs.startOn).isAfter(moment(previousJob.startOn))
-      ) {
-        return;
-      }
-
-      if (
-        previousJob &&
-        moment(jobs.startOn).isSameOrBefore(moment(previousJob.startOn))
-      ) {
-        startOn = moment(previousJob.startOn);
-        startOn.add(1, "days");
-        while (daysToSkip.indexOf(startOn.day()) !== -1) {
+      if (previousJob) {
+        if(moment(previousJob.startOn).isSameOrAfter(startOn)) {
+          startOn = moment(previousJob.startOn);
           startOn.add(1, "days");
+          skipDays(daysToSkip, startOn);
+          set(jobs, "startOn", startOn.toDate());
         }
       } else {
-        startOn = moment(newDateToShiftJobs);
-        while (daysToSkip.indexOf(startOn.day()) !== -1) {
-          startOn.add(1, "days");
-        }
+        skipDays(daysToSkip, startOn);
+        set(jobs, "startOn", startOn.toDate());
       }
-      set(jobs, "startOn", startOn.toDate());
     });
+  }
+
+  const skipDays = (daysToSkip, startOn) => {
+    while (daysToSkip.indexOf(startOn.day()) !== -1) {
+      startOn.add(1, "days");
+    }
   };
 
   return {
@@ -109,7 +99,7 @@ export default function jobsScheduleConfig() {
     createJobsOnNewDate,
     filterEmptyJobs,
     getJobsIndexOnDate,
-    moveAllFutureJobsToNextValidDate,
+    moveAllJobsToNextValidDate,
     MAX_WEEK_DAYS
   };
 }

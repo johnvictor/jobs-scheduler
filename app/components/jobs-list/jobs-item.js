@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 
 import jobsScheduleConfig from '../../utils/jobs-schedule-config';
 
@@ -37,7 +37,9 @@ export default class JobsItemComponent extends Component {
             const jobsIndex = this.config.getJobsIndexOnDate(model, jobsDetail.startOn);
             const previousJobsScheldules = this.config.filterEmptyJobs(model.slice(0, jobsIndex));
             const futurejobSchedules = this.config.filterEmptyJobs(model.slice(jobsIndex));
-            this.config.moveAllFutureJobsToNextValidDate(futurejobSchedules, newDateToShiftJobs, this.daysToSkip, previousJobsScheldules[previousJobsScheldules.length - 1]);
+            set(futurejobSchedules[0], 'startOn', newDateToShiftJobs);
+
+            this.config.moveAllJobsToNextValidDate(futurejobSchedules, this.daysToSkip);
             model.clear();
             model.pushObjects([...previousJobsScheldules, ...futurejobSchedules]);
             this.noOfDaysToShiftAllJobs = '';

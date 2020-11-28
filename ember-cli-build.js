@@ -6,6 +6,9 @@ module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
     sassOptions: {
       extension: 'scss'
+    },
+    fingerprint: {
+      exclude: ['assets/images/pencil.png']
     }
   });
 

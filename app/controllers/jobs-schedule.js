@@ -87,9 +87,15 @@ export default class JobsScheduleController extends Controller {
     shiftTheSchedule(index, newDateToShiftJobs) {
         const previousJobsScheldules = this.config.filterEmptyJobs(this.model.slice(0, index));
         const futurejobSchedules = this.config.filterEmptyJobs(this.model.slice(index));
-        this.config.createJobsOnNewDate(previousJobsScheldules, moment(newDateToShiftJobs), this.jobName);
+
+        futurejobSchedules.unshiftObject({
+            startOn: moment(newDateToShiftJobs),
+            jobs: [this.jobName]
+        });
+
         this.model.clear();
-        this.config.moveAllFutureJobsToNextValidDate(futurejobSchedules, newDateToShiftJobs, this.daysToSkip, previousJobsScheldules[previousJobsScheldules.length - 1]);
+
+        this.config.moveAllJobsToNextValidDate(futurejobSchedules, this.daysToSkip);
         this.model.pushObjects([...previousJobsScheldules, ...futurejobSchedules]);
         this.config.sortJobsSchedule(this.model);
     }

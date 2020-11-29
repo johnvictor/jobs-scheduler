@@ -12,6 +12,7 @@ export default class JobsListJobsItemJobActionComponent extends Component {
         this.isEdit = !this.isEdit;
 
         if(shiftDays) {
+            this.noOfDaysToShift = this.noOfDaysToShift ? this.noOfDaysToShift.trim() : '';
             this.args.shiftDays(this.args, this.noOfDaysToShift);
         }
     }

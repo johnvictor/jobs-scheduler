@@ -39,7 +39,7 @@ export default class JobsScheduleController extends Controller {
             this.set('errorMsg', 'No days available!');
             return false;
         }
-        if(isNaN(this.noOfDaysToShift)) {
+        if(isNaN(this.noOfDaysToShift) || this.noOfDaysToShift === '') {
             this.set('errorMsg', 'Please enter a valid number!');
             return false;
         }
